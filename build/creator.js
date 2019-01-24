@@ -39,17 +39,17 @@ const creator = (function () {
             if (!fs.existsSync(outputPath + 'amWiki/images/')) {
                 fs.mkdirSync(outputPath + 'amWiki/images/', 0o777);
             }
-            if (!fs.existsSync(outputPath + 'library/')) {
-                fs.mkdirSync(outputPath + 'library/', 0o777);
-                if (!fs.existsSync(outputPath + 'library/001-学习amWiki/')) {
-                    fs.mkdirSync(outputPath + 'library/001-学习amWiki/', 0o777);
-                }
-                if (!fs.existsSync(outputPath + 'library/001-学习amWiki/05-学习markdown/')) {
-                    fs.mkdirSync(outputPath + 'library/001-学习amWiki/05-学习markdown/', 0o777);
-                }
-                if (!fs.existsSync(outputPath + 'library/002-文档示范/')) {
-                    fs.mkdirSync(outputPath + 'library/002-文档示范/', 0o777);
-                }
+            if (!fs.existsSync(outputPath + 'libraries/')) {
+                fs.mkdirSync(outputPath + 'libraries/', 0o777);
+                // if (!fs.existsSync(outputPath + 'library/001-学习amWiki/')) {
+                //     fs.mkdirSync(outputPath + 'library/001-学习amWiki/', 0o777);
+                // }
+                // if (!fs.existsSync(outputPath + 'library/001-学习amWiki/05-学习markdown/')) {
+                //     fs.mkdirSync(outputPath + 'library/001-学习amWiki/05-学习markdown/', 0o777);
+                // }
+                // if (!fs.existsSync(outputPath + 'library/002-文档示范/')) {
+                //     fs.mkdirSync(outputPath + 'library/002-文档示范/', 0o777);
+                // }
                 return false;
             }
             return true;
@@ -299,29 +299,29 @@ const creator = (function () {
                     that._copyFile(options.filesPath + file[0], options.outputPath + file[1]);
                 }
                 //如果没有library则复制一套默认文档
-                if (!hasLibrary) {
-                    //首页文档
-                    const home = fs.readFileSync(options.filesPath + 'doc.home.md', 'utf-8').replace('{{name}}', config.name);
-                    fs.writeFileSync(options.outputPath + 'library/home-首页.md', home, 'utf-8');
-                    //其他页面文档
-                    let fileList2 = [
-                        ['doc.amwiki-introduce.md', 'library/001-学习amWiki/01-amWiki轻文库简介.md'],
-                        ['doc.amwiki-mind-map.md', 'library/001-学习amWiki/02-amWiki功能导图.md'],
-                        ['doc.amwiki-new.md', 'library/001-学习amWiki/03-如何开始一个新amWiki轻文库.md'],
-                        ['doc.amwiki-edit.md', 'library/001-学习amWiki/04-如何编辑amWiki轻文库.md'],
-                        ['doc.amwiki-testing.md', 'library/001-学习amWiki/06-使用测试模块测试接口.md'],
-                        ['doc.amwiki-test-cross.md', 'library/001-学习amWiki/07-amWiki转接到任意域名进行接口测试.md'],
-                        ['doc.md-start.md', 'library/001-学习amWiki/05-学习markdown/01-Markdown快速开始.md'],
-                        ['doc.md-high-lighting.md', 'library/001-学习amWiki/05-学习markdown/02-amWiki与语法高亮.md'],
-                        ['doc.md-flow-chart.md', 'library/001-学习amWiki/05-学习markdown/03-amWiki与流程图.md'],
-                        ['doc.md-atom.md', 'library/001-学习amWiki/05-学习markdown/05-Atom对Markdown的原生支持.md'],
-                        ['doc.demo-api.md', 'library/002-文档示范/001-通用API接口文档示例.md'],
-                        ['doc.demo-long-article.md', 'library/002-文档示范/002-超长文档页内目录示例.md']
-                    ];
-                    for (let file of fileList2) {
-                        that._copyFile(options.filesPath + file[0], options.outputPath + file[1]);
-                    }
-                }
+                // if (!hasLibrary) {
+                //     //首页文档
+                //     const home = fs.readFileSync(options.filesPath + 'doc.home.md', 'utf-8').replace('{{name}}', config.name);
+                //     fs.writeFileSync(options.outputPath + 'library/home-首页.md', home, 'utf-8');
+                //     //其他页面文档
+                //     let fileList2 = [
+                //         ['doc.amwiki-introduce.md', 'library/001-学习amWiki/01-amWiki轻文库简介.md'],
+                //         ['doc.amwiki-mind-map.md', 'library/001-学习amWiki/02-amWiki功能导图.md'],
+                //         ['doc.amwiki-new.md', 'library/001-学习amWiki/03-如何开始一个新amWiki轻文库.md'],
+                //         ['doc.amwiki-edit.md', 'library/001-学习amWiki/04-如何编辑amWiki轻文库.md'],
+                //         ['doc.amwiki-testing.md', 'library/001-学习amWiki/06-使用测试模块测试接口.md'],
+                //         ['doc.amwiki-test-cross.md', 'library/001-学习amWiki/07-amWiki转接到任意域名进行接口测试.md'],
+                //         ['doc.md-start.md', 'library/001-学习amWiki/05-学习markdown/01-Markdown快速开始.md'],
+                //         ['doc.md-high-lighting.md', 'library/001-学习amWiki/05-学习markdown/02-amWiki与语法高亮.md'],
+                //         ['doc.md-flow-chart.md', 'library/001-学习amWiki/05-学习markdown/03-amWiki与流程图.md'],
+                //         ['doc.md-atom.md', 'library/001-学习amWiki/05-学习markdown/05-Atom对Markdown的原生支持.md'],
+                //         ['doc.demo-api.md', 'library/002-文档示范/001-通用API接口文档示例.md'],
+                //         ['doc.demo-long-article.md', 'library/002-文档示范/002-超长文档页内目录示例.md']
+                //     ];
+                //     for (let file of fileList2) {
+                //         that._copyFile(options.filesPath + file[0], options.outputPath + file[1]);
+                //     }
+                // }
                 return options.outputPath;
             }).catch((e) => {
                 console.error(e);

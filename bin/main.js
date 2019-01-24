@@ -45,7 +45,7 @@ const wikis = {};
 //注册文库
 mngWiki.linkWikis(wikis);
 if (root) {
-    mngWiki.addWiki(root);
+    mngWiki.addAllWikis(root);
 }
 
 co(function*() {

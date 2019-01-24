@@ -46,6 +46,14 @@ const manageWiki = (function () {
             }
             return null;
         },
+        addAllWikis: function (root) {
+            for (let fileName of manageFolder.readFolder(root)) {
+                filePath = dirPath + '/' + fileName;
+                if (manageFolder.isFolder(filePath)) {
+                    this.addWiki(filePath)
+                }
+            }
+        },
         /**
          * 添加一个文库到记录
          * @param {String} root - 文库根目录
@@ -103,7 +111,7 @@ const manageWiki = (function () {
          */
         checkAddWiki: function (path) {
             //验证转换 path 为 wiki 根目录
-            const root = mngFolder.isAmWiki(path);
+            const root = mngFolder.isWiki(path);
             if (root) {
                 this.addWiki(root);
             }
@@ -118,7 +126,7 @@ const manageWiki = (function () {
                 const root = this._wikis[wId].root;
                 //当文件夹不存在或者文件夹不为amWiki时，标记弃用
                 //也就是说，从atom目录树删除项目，并不会标记弃用，必须删除文库本地文件和文件夹
-                this._wikis[wId].deprecated = !fs.existsSync(root) || !mngFolder.isAmWiki(root)
+                this._wikis[wId].deprecated = !fs.existsSync(root) || !mngFolder.isWiki(root)
             }
         },
         /**

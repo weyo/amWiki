@@ -7,13 +7,24 @@ const fs = require('fs');
 
 const manageFolder = (function () {
     return {
+        isAmWiki: function (path) {
+            if (!path && typeof path !== 'string') {
+                return false;
+            }
+            path = path.replace(/\\/g, '/');
+            let states = [
+                fs.existsSync(path + 'libraries/'),
+                fs.existsSync(path + 'wikis.json'),
+            ];
+            return states[0] && states[1] ? path : false;
+        },
         /**
          * 判断一个文件夹是否为 amWiki 文库项目
          * @param {String} path - 需要判断的文件夹路径
          * @returns {Boolean|String} 判断为否时返回 false，判断为真时返回项目根目录的路径
          * @public
          */
-        isAmWiki: function (path) {
+        isWiki: function (path) {
             if (!path && typeof path !== 'string') {
                 return false;
             }
