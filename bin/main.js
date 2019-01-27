@@ -54,12 +54,42 @@ co(function*() {
     switch (command) {
         //依据引导创建 wiki
         case 'init':
+        case '-i':
+            if (root) {
+                console.info('当前路径为 amWiki 项目文件夹，无需执行初始化操作！');
+                break;
+            }
+            rootPath = process.cwd();
+            //新项目名称作为输入参数
+            let projectName = parameters[0];
+            if (typeof projectName === 'undefined') {
+                creator.init(rootPath);
+            } else {
+                creator.init(rootPath, projectName);
+            }
+            console.info('新 amWiki 项目初始化成功，请在 wikis.json 中对项目进行配置。');
             break;
         //依据 config.json 创建 wiki
         case 'create':
         case '-c':
+            if (!root) {
+                console.error('非 amWiki 项目文件夹，无法创建新 Wiki 文库，请先执行初始化操作！');
+                break;
+            }
+            //新 wiki 的名称作为输入参数
+            const wikiName = parameters[0];
+            if (typeof wikiName === 'undefined') {
+                console.error('请输入新 wiki 文库的名称！');
+                break;
+            }
+            //初始化创建新的 wiki 目录
+            currentPath = process.cwd().replace(/\\/g, '/');
+            const newWikiPath = creator.initWiki(currentPath, wikiName);
+            if (!newWikiPath) {
+                break;
+            }
             // config.json 文件路径
-            const configPath = process.cwd().replace(/\\/g, '/') + '/config.json';
+            const configPath = newWikiPath.replace(/\\/g, '/') + '/config.json';
             //项目 files 文件夹路径
             const filesPath = mainPath.replace(/\\/g, '/').split('bin')[0] + 'files/';
             //开始创建
@@ -74,26 +104,33 @@ co(function*() {
         //更新 wiki
         case 'update':
         case '-u':
-            if (!root) {
+            //待更新的 wiki 名称作为输入参数
+            const updateWikiName = parameters[0];
+            if (typeof updateWikiName === 'undefined') {
+                console.error('请输入需要更新的 wiki 文库名称！');
+                break;
+            }
+            wikiPath = root.replace(/\\/g, '/') + '/' + updateWikiName;
+            if (!mngFolder.isWiki(wikiPath)) {
                 console.error('非 amWiki 项目文件夹，无法更新导航！');
                 break;
             }
-            const type = parameters[0];
+            const type = parameters[1];
             //更新导航
             if (type === 'nav') {
-                makeNav.refresh(root);
+                makeNav.refresh(wikiPath);
             }
             //更新文库嵌入数据
             else if (type === 'mut') {
-                makeMut.make(root);
+                makeMut.make(wikiPath);
             }
             //更新 SEO 模块
             else if (type === 'seo') {
             }
             //完整更新
             else if (typeof type === 'undefined') {
-                makeNav.refresh(root);
-                makeMut.make(root, true);
+                makeNav.refresh(wikiPath);
+                makeMut.make(wikiPath, true);
             }
             break;
         //启动本地服务器

@@ -15,7 +15,7 @@ const makeNavigation = (function () {
          * @public
          */
         refresh: function (editPath) {
-            const path = editPath.replace(/\\/g, '/').split('libraries')[0] + 'libraries/';
+            const path = editPath.replace(/\\/g, '/').split('library')[0] + '/library/';
             const [tree, list] = mngFolder.readLibraryTree(path);
             if (!tree) {
                 return '';

@@ -47,10 +47,10 @@ const manageWiki = (function () {
             return null;
         },
         addAllWikis: function (root) {
-            for (let fileName of manageFolder.readFolder(root)) {
-                filePath = dirPath + '/' + fileName;
-                if (manageFolder.isFolder(filePath)) {
-                    this.addWiki(filePath)
+            for (let fileName of mngFolder.readFolder(root)) {
+                filePath = root + '/' + fileName;
+                if (mngFolder.isFolder(filePath)) {
+                    this.addWiki(filePath, fileName);
                 }
             }
         },
@@ -60,7 +60,8 @@ const manageWiki = (function () {
          * @param {Number} [id] - 文库的计算id
          * @public
          */
-        addWiki: function (root, id = this.createWikiId(root)) {
+        addWiki: function (root, name) {
+            id = this.createWikiId(root);
             if (typeof root === 'undefined') {
                 return;
             }
@@ -69,14 +70,17 @@ const manageWiki = (function () {
                 this.updateWikiConfig();
                 return;
             }
+            console.info('已发现 Wiki 文库:'+  name);
             //文库信息
             this._wikis[id] = {
                 //文库id，由真实地址计算而来，也就是说文库是基于不同地址来管理的
                 id: id,
                 //文库根目录地址
                 root: root,
+                //文库名称
+                name: name,
                 //文库文档地址
-                path: root + 'library/',
+                path: root + '/library/',
                 //弃用标记，当文库被删除或转移走后，原有地址标记为弃用
                 deprecated: false,
                 //文件清单md5值，用于检测文库目录树变化
@@ -109,11 +113,11 @@ const manageWiki = (function () {
          * @param {String} path - 需要判断的路径
          * @public
          */
-        checkAddWiki: function (path) {
+        checkAddWiki: function (path, name) {
             //验证转换 path 为 wiki 根目录
             const root = mngFolder.isWiki(path);
             if (root) {
-                this.addWiki(root);
+                this.addWiki(root, name);
             }
         },
         /**
@@ -138,7 +142,7 @@ const manageWiki = (function () {
                 if (this._wikis.hasOwnProperty(wId)) {
                     //读取 config
                     if (!this._wikis[wId].deprecated) {
-                        let configStr = fs.readFileSync(this._wikis[wId].root + 'config.json') || '{}';
+                        let configStr = fs.readFileSync(this._wikis[wId].root + '/config.json') || '{}';
                         try {
                             this._wikis[wId].config = this.parseConfig(JSON.parse(configStr));
                         } catch (e) {

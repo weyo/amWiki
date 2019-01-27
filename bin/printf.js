@@ -66,13 +66,21 @@ const helpWords = `
 命令列表：
   -h, help        显示本帮助
   -v, version     显示版本号
+  -i, init        初始化 amWiki 项目，在当前目录下创建 wikis.json 配置文件
+                  可选参数：
+                      [name]  指定新建 amWiki 项目的名称
   -c, create      创建 wiki
+                  必需参数：
+                      [name]  指定新建 Wiki 库的名称
+                  ${clc(90, '(eg: amwiki create demo)')}
   -u, update      更新 wiki 数据，默认根据文库配置选择适当内容更新
+                  必需参数：
+                      [name]  指定待更新 Wiki 库的名称
                   可选参数：
                       [nav|mut]
                           指定仅更新导航
                           指定仅更新页面挂载数据
-                  ${clc(90, '(eg: amwik update nav)')}
+                  ${clc(90, '(eg: amwik update demo nav)')}
   -s, server      启动本地服务器，默认本地服务器使用端口号 5171
                   可选参数：
                       [8080]  重新指定端口号

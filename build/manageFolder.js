@@ -7,16 +7,32 @@ const fs = require('fs');
 
 const manageFolder = (function () {
     return {
+        /**
+         * 根据 wikis.json 文件判断当前目录是否amWiki的根目录
+         * @param {String} path 需要判断的文件夹路径
+         */
         isAmWiki: function (path) {
             if (!path && typeof path !== 'string') {
                 return false;
             }
             path = path.replace(/\\/g, '/');
-            let states = [
-                fs.existsSync(path + 'libraries/'),
-                fs.existsSync(path + 'wikis.json'),
-            ];
-            return states[0] && states[1] ? path : false;
+            wikisConfPath = path + '/wikis.json';
+            if (fs.existsSync(wikisConfPath)) {
+                wikisConfStr = fs.readFileSync(wikisConfPath, 'utf-8') || '';
+                //解析默认配置
+                wikisConfig = null;
+                try {
+                    wikisConfig = JSON.parse(wikisConfStr);
+                    if (!wikisConfig.hasOwnProperty('name')) {
+                        console.warn('wikis.json 配置文件中未检测到 amWiki 项目名称！');
+                    }
+                } catch (e) {
+                    console.warn('注意：配置解析失败，请检查 wikis.json 是否有严格按 Json 格式书写！\n错误消息：' + e.message);
+                }
+                return path;
+            } else {
+                return false;
+            }
         },
         /**
          * 判断一个文件夹是否为 amWiki 文库项目

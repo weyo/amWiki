@@ -156,8 +156,14 @@ class Server {
         } catch (e) {
             filePath = gbk.decode(filePath);
         }
+        alert('filePath3: ' + filePath);
         //真实地址
-        const realPath = this._wikis[wId].root + filePath;
+        let realPath = this._wikis[wId].root + '/' + filePath;
+        //const realPath = filePath;
+        if (filePath.includes('logo.png')) {
+            //realPath = filePath;
+        }
+        alert('realPath: ' + realPath);
         //解析文件
         try {
             fs.exists(realPath, (exists) => {
@@ -223,13 +229,16 @@ class Server {
                 //文库链接
                 let link = 'http://' + this.getLocalIP() + ':' + this.getPort() + '/wiki' + wiki.id + '/index.html';
                 //文库 logo 地址
-                let logo = wiki.config.logo;
+                //let logo = wiki.root + '/' + wiki.config.logo;
+                let logo = '/' + wiki.config.logo;
+                alert('logo1: ' + logo);
                 if (logo.indexOf('http') < 0) {
                     logo = '/wiki' + wiki.id + '/' + logo;
+                    alert('logo2: ' + logo);
                 }
                 //文库详情
                 let content = '<span>ID: <b>' + wiki.id + '</b></span>' +
-                    '<span>本地位置: <b>' + wiki.root + '</b></span>' +
+                    //'<span>本地位置: <b>' + wiki.root + '</b></span>' +
                     '<span>本地网址: <b>' + link + '</b></span>';
                 if (wiki.config.testing) {
                     content += '<span>测试模块已开启</span>';
