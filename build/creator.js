@@ -154,7 +154,7 @@ const creator = (function () {
          * @returns {Promise}
          * @private
          */
-        _checkConfig: function (configPath, filesPath) {
+        _checkConfig: function (configPath, filesPath, wikiName, wikiVersion) {
             const that = this;
             return co(function*() {
                 const options = {};
@@ -171,7 +171,9 @@ const creator = (function () {
                 }
                 if (configStr.length === 0) {
                     if (yield confirm2('没有读取到任何配置，继续创建么？')) {
-                        configStr = '{}';
+                        configStr = '{\n' + 
+                                    '  \"name\": \"' + wikiName + '\",\n' +
+                                    '  \"ver\": \"' + wikiVersion + '\"\n}';
                         if (noConfig) {
                             fs.writeFileSync(configPath, configStr, 'utf-8');
                         }
@@ -232,10 +234,10 @@ const creator = (function () {
          * @returns {Promise} 项目根目录
          * @public
          */
-        create: function (configPath, filesPath) {
+        create: function (configPath, filesPath, wikiName, wikiVersion) {
             const that = this;
             return co(function*() {
-                const {options, config} = yield that._checkConfig(configPath, filesPath);
+                const {options, config} = yield that._checkConfig(configPath, filesPath, wikiName, wikiVersion);
                 //开始创建
                 const files = mngFolder.readFolder(options.outputPath);
                 if (files.length > 1) {
@@ -246,7 +248,7 @@ const creator = (function () {
                 //创建index.html
                 let indexPage = fs.readFileSync(options.filesPath + 'amWiki.tpl', 'utf-8');
                 indexPage = indexPage.replace(/\{\{name\}\}/g, config.name)
-                    .replace('{{version}}', config.version)
+                    .replace('{{version}}', config.ver)
                     .replace('{{logo}}', config.logo);
                 //嵌入配置
                 indexPage = indexPage.replace('{{config}}', 'AWConfig=' + JSON.stringify(config));

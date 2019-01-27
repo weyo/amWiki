@@ -38,11 +38,13 @@ class Server {
 
     /**
      * @constructor
-     * @param {[Object]} wikis
+     * @param {[Object]} wikis Wiki 库列表
+     * @param {[Object]} wikisConf amWiki 项目配置
      * @param {Number} port=5171
      */
-    constructor(wikis, port = 5171) {
+    constructor(wikis, wikisConf, port = 5171) {
         this._wikis = wikis;
+        this._wikisConf = wikisConf;
         this._port = port;
         this._localIP = this.getLocalIP();
         this._indexShow = true;
@@ -156,14 +158,8 @@ class Server {
         } catch (e) {
             filePath = gbk.decode(filePath);
         }
-        alert('filePath3: ' + filePath);
         //真实地址
         let realPath = this._wikis[wId].root + '/' + filePath;
-        //const realPath = filePath;
-        if (filePath.includes('logo.png')) {
-            //realPath = filePath;
-        }
-        alert('realPath: ' + realPath);
         //解析文件
         try {
             fs.exists(realPath, (exists) => {
@@ -213,9 +209,9 @@ class Server {
             'li p span{display:block}li p a,li p b{color:gray}';
         //布局
         let layoutTp = '<!DOCTYPE html><html><head><meta charset="UTF-8">' +
-            '<title>amWiki Index Page</title>' +
+            '<title>' + this._wikisConf.name + '</title>' +
             '<style>{{style}}</style></head><body>' +
-            '<h1>amWiki Index Page <small>(文库列表索引)</small></h1>' +
+            '<h1>' + this._wikisConf.name + ' <small>(Wiki 文库列表)</small></h1>' +
             '<ul>{{list}}</ul></body></html>';
         //列表单项
         let itemTp = '<li><a href="{{link}}" target="_blank">' +
@@ -229,12 +225,9 @@ class Server {
                 //文库链接
                 let link = 'http://' + this.getLocalIP() + ':' + this.getPort() + '/wiki' + wiki.id + '/index.html';
                 //文库 logo 地址
-                //let logo = wiki.root + '/' + wiki.config.logo;
                 let logo = '/' + wiki.config.logo;
-                alert('logo1: ' + logo);
                 if (logo.indexOf('http') < 0) {
-                    logo = '/wiki' + wiki.id + '/' + logo;
-                    alert('logo2: ' + logo);
+                    logo = '/wiki' + wiki.id + logo;
                 }
                 //文库详情
                 let content = '<span>ID: <b>' + wiki.id + '</b></span>' +

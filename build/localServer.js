@@ -19,14 +19,15 @@ const localServer = (function () {
         /**
          * 启动服务器
          * @param {Object} wikis - 文库记录列表的引用
+         * @param {Object} wikisConf - amWiki 项目配置
          * @param {Number} port - 服务器端口号
          * @public
          */
-        run: function (wikis, port) {
+        run: function (wikis, wikisConf, port) {
             const that = this;
             return co(function*() {
                 if (!that._server) {
-                    that._server = new Sever(wikis, port);
+                    that._server = new Sever(wikis, wikisConf, port);
                     yield that._server.run();
                 }
             });

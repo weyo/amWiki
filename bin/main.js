@@ -41,11 +41,13 @@ const packageConf = JSON.parse(fs.readFileSync(mainPath.split(/bin[\\\/]main/)[0
 //项目根目录
 const root = mngFolder.isAmWiki(process.cwd());
 const wikis = {};
+let wikisConf = null;
 
 //注册文库
 mngWiki.linkWikis(wikis);
 if (root) {
     mngWiki.addAllWikis(root);
+    wikisConf = JSON.parse(fs.readFileSync(root.replace(/\\/g, '/') + '/wikis.json', 'utf-8'));
 }
 
 co(function*() {
@@ -78,6 +80,7 @@ co(function*() {
             }
             //新 wiki 的名称作为输入参数
             const wikiName = parameters[0];
+            const wikiVersion = parameters[1];
             if (typeof wikiName === 'undefined') {
                 console.error('请输入新 wiki 文库的名称！');
                 break;
@@ -93,7 +96,8 @@ co(function*() {
             //项目 files 文件夹路径
             const filesPath = mainPath.replace(/\\/g, '/').split('bin')[0] + 'files/';
             //开始创建
-            const root2 = yield creator.create(configPath, filesPath, packageConf);
+            let version = typeof wikiVersion === 'undefined' ? 'Beta' : wikiVersion;
+            const root2 = yield creator.create(configPath, filesPath, wikiName, version);
             if (!root2) {
                 break;
             }
@@ -146,14 +150,14 @@ co(function*() {
             if (typeof port !== 'undefined') {
                 //端口合法
                 if (/^\d+$/.test(port)) {
-                    yield localServer.run(wikis, port);
+                    yield localServer.run(wikis, wikisConf, port);
                     if (noIndex === 'no-index') {
                         localServer.setOffIndex();
                     }
                 }
                 //端口写成 noIndex
                 else {
-                    yield localServer.run(wikis);
+                    yield localServer.run(wikis, wikisConf);
                     if (port === 'no-index' || noIndex === 'no-index') {
                         localServer.setOffIndex();
                     }
@@ -161,7 +165,7 @@ co(function*() {
             }
             //没输入端口号
             else {
-                yield localServer.run(wikis);
+                yield localServer.run(wikis, wikisConf);
             }
             break;
         //本地浏览文档
