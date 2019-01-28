@@ -2,44 +2,54 @@
 
 本项目是 amWiki 轻文库的定制版本，用于实现在服务器端运行的轻量级 Wiki 文库。
 
-## 使用方法：
+## 使用方法
 
 1. 在服务器上安装 nodejs 及 PM2 进程管理工具
 
 2. 下载本项目源码并拷贝至服务器（以下示例为放入 `/usr/local/src/` 目录，为规范化 nodejs 模块考虑，也可以放入 node_modules 目录），并根据需要建立软连接，如：
 
-```ln -s /usr/local/src/amWiki/bin/main.js amwiki2```
+    ```shell
+    ln -s /usr/local/src/amWiki/bin/main.js amwiki2
+    ```
 
 3. 在服务器上创建 amWiki 项目目录：
 
-```mkdir /home/wiki```
+    ```shell
+    mkdir /home/wiki
+    ```
 
-4. 切换至 amWiki 项目目录，并初始化目录：
+4. 切换至 amWiki 项目目录，初始化目录：
 
-```shell
-cd /home/wiki
-amwiki2 -i 我的 Wiki 文库
-```
+    ```shell
+    cd /home/wiki
+    amwiki2 -i 我的 Wiki 文库
+    ```
+
+    >根据需要配置 wikis.json 配置文件：
+    - `name` - amWiki 项目名称
+    - `domain` - amWiki 项目服务端域名或地址（不配置则直接展示本地IP）
 
 5. 创建新 Wiki 文库：
 
-```shell
-amwiki2 create 我的知识库1
-amwiki2 create 我的知识库2 V0.1
-```
+    ```shell
+    amwiki2 create 我的知识库1
+    amwiki2 create 我的知识库2 V0.1
+    ```
 
-6. 编辑修改新文库：
+    >根据需要配置各个文库的 config.json 配置文件，配置方法参阅[config.json 配置](http://amwiki.org/doc/?file=030-%E6%96%87%E6%A1%A3%E6%8A%80%E6%9C%AF%E7%AF%87/100-config%E9%85%8D%E7%BD%AE)。
 
-```shell
-amwiki2 update 我的知识库1
-amwiki2 update 我的知识库2
-```
+6. 编辑修改新文库并更新：
+
+    ```shell
+    amwiki2 update 我的知识库1
+    amwiki2 update 我的知识库2
+    ```
 
 7. 使用 PM2 启动 amWiki 服务：
 
-```shell
-pm2 start 'amwiki -s'
-```
+    ```shell
+    pm2 start 'amwiki2 -s'
+    ```
 
 随后，即可在浏览器中访问文库：http://<服务器IP>:5171/（端口可根据需要在步骤 7 中调整）。
 
@@ -47,9 +57,11 @@ pm2 start 'amwiki -s'
 
 ---
 
+> 以下为原项目 README 文档。
+
 # amWiki 轻文库
 
-![amWiki logo](https://amwiki.xf09.net/docs/assets/logo.png)  
+![amWiki logo](http://amwiki.org/official/img/logo.png)  
 amWiki 是一款由 JS 开发、依赖 Atom 或 Nodejs-Npm 的 Markdown 轻量级前端化开源文库系统。  
 amWiki 致力于让大家可以更简单、更便捷的建设个人和团队文库！  
 

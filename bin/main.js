@@ -114,7 +114,7 @@ co(function*() {
                 console.error('请输入需要更新的 wiki 文库名称！');
                 break;
             }
-            wikiPath = root.replace(/\\/g, '/') + '/' + updateWikiName;
+            wikiPath = root.replace(/\\/g, '/') + '/' + updateWikiName + '/';
             if (!mngFolder.isWiki(wikiPath)) {
                 console.error('非 amWiki 项目文件夹，无法更新导航！');
                 break;

@@ -222,8 +222,15 @@ class Server {
         for (let wId in this._wikis) {
             if (this._wikis.hasOwnProperty(wId) && !this._wikis[wId].deprecated) {
                 let wiki = this._wikis[wId];
+                let domain = null;
                 //文库链接
-                let link = 'http://' + this.getLocalIP() + ':' + this.getPort() + '/wiki' + wiki.id + '/index.html';
+                if (this._wikisConf.domain) {
+                    //如果配置了域名或 public IP 就采用配置地址
+                    domain = this._wikisConf.domain;
+                } else {
+                    domain = this.getLocalIP();
+                }
+                let link = 'http://' + domain + ':' + this.getPort() + '/wiki' + wiki.id + '/index.html';
                 //文库 logo 地址
                 let logo = '/' + wiki.config.logo;
                 if (logo.indexOf('http') < 0) {
@@ -232,7 +239,7 @@ class Server {
                 //文库详情
                 let content = '<span>ID: <b>' + wiki.id + '</b></span>' +
                     //'<span>本地位置: <b>' + wiki.root + '</b></span>' +
-                    '<span>本地网址: <b>' + link + '</b></span>';
+                    '<span>访问地址: <b>' + link + '</b></span>';
                 if (wiki.config.testing) {
                     content += '<span>测试模块已开启</span>';
                 }
