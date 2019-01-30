@@ -1,4 +1,4 @@
-# amWiki 轻文库服务器定制版
+# amWiki 轻文库服务器版
 
 本项目是 amWiki 轻文库的定制版本，用于实现在服务器端运行的轻量级 Wiki 文库。
 
@@ -53,7 +53,7 @@
 
 随后，即可在浏览器中访问文库：http://<服务器IP>:5171/（端口可根据需要在步骤 7 中调整）。
 
-更多 amWiki 项目信息请参考原项目：(https://github.com/TevinLi/amWiki)[https://github.com/TevinLi/amWiki]
+更多 amWiki 项目信息请参考原项目：[https://github.com/TevinLi/amWiki](https://github.com/TevinLi/amWiki)
 
 ---
 

@@ -216,7 +216,7 @@ co(function*() {
 
     //关闭用户输入
     process.stdin.on('error', (e) => {
-        if (e.code !== 'EPIPE' || e.syscall !== 'shutdown') {
+        if (e.code !== 'EPIPE' && e.syscall !== 'shutdown') {
             throw e;
         }
     });
